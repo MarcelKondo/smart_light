@@ -10,6 +10,7 @@
 // bar items. The first one is selected.](https://flutter.github.io/assets-for-api-docs/assets/material/bottom_navigation_bar.png)
 
 import 'package:flutter/material.dart';
+import 'teste2.dart';
 
 void main() => runApp(MyApp());
 
@@ -55,9 +56,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   ];
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SecondRoute())
+    );
   }
 
   @override
