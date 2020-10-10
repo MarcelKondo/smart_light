@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 /// Flutter code sample for BottomNavigationBar
 
 // This example shows a [BottomNavigationBar] as it is used within a [Scaffold]
@@ -53,13 +55,16 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       'Index 2: School',
       style: optionStyle,
     ),
+    Text(
+      'Index 3: Profile',
+      style: optionStyle,
+    ),
   ];
 
   void _onItemTapped(int index) {
-    Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => SecondRoute())
-    );
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
@@ -85,9 +90,15 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
             icon: Icon(Icons.school),
             label: 'School',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'Profile',
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
+        unselectedItemColor: Colors.black,
+        unselectedLabelStyle: TextStyle(color: Colors.black),
         onTap: _onItemTapped,
       ),
     );
