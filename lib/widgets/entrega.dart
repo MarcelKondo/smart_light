@@ -6,13 +6,13 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:smart_light/pages/destination.dart';
 //import 'package:smart_light/pages/directions.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage();
+class Entrega extends StatefulWidget {
+  Entrega();
   @override
-  HomePageState createState() => HomePageState();
+  EntregaState createState() => EntregaState();
 }
 
-class HomePageState extends State<HomePage> {
+class EntregaState extends State<Entrega> {
   Completer<GoogleMapController> _controller = Completer();
 
   @override
@@ -26,7 +26,7 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Medição'),
+        title: Text('Entrega'),
       ),
       body: Stack(
         children: <Widget>[

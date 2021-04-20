@@ -12,12 +12,24 @@
 // bar items. The first one is selected.](https://flutter.github.io/assets-for-api-docs/assets/material/bottom_navigation_bar.png)
 
 import 'package:flutter/material.dart';
+import 'package:smart_light/widgets/problem.dart';
+import 'package:smart_light/widgets/profile.dart';
 import './widgets/measure_widget.dart';
+import './widgets/profile.dart';
+import './widgets/entrega.dart';
+import 'package:camera/camera.dart';
+import 'dart:async';
 
-void main() => runApp(MyApp());
+
+void main() async {WidgetsFlutterBinding.ensureInitialized();
+
+  // Obtain a list of the available cameras on the device.
+  
+  runApp(MyApp());}
 
 /// This is the main application widget.
 class MyApp extends StatelessWidget {
+  MyApp();
   static const String _title = 'Flutter Code Sample';
 
   @override
@@ -31,7 +43,7 @@ class MyApp extends StatelessWidget {
 
 /// This is the stateful widget that the main application instantiates.
 class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key key}) : super(key: key);
+  
 
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
@@ -40,18 +52,14 @@ class MyStatefulWidget extends StatefulWidget {
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
+
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static  List<Widget> _widgetOptions = <Widget>[
     HomePage(),
-    Text(
-      'Index 1: Entrega',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Perfil',
-      style: optionStyle,
-    ),
+    Entrega(),
+    ProblemWidget(),
+    ProfileApp(),
   ];
 
   void _onItemTapped(int index) {
@@ -63,9 +71,9 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('BottomNavigationBar Sample'),
-      ),
+      /*appBar: AppBar(
+        title: const Text('Smart Light'),
+      ),*/
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
@@ -78,6 +86,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt),
             label: 'Entrega',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.warning_rounded),
+            label: 'Problema',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
