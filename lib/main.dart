@@ -1,5 +1,7 @@
 //import 'dart:html';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 /// Flutter code sample for BottomNavigationBar
 
 // This example shows a [BottomNavigationBar] as it is used within a [Scaffold]
@@ -19,12 +21,17 @@ import './widgets/profile.dart';
 import './widgets/entrega.dart';
 import 'package:camera/camera.dart';
 import 'dart:async';
+import 'package:firebase_database/firebase_database.dart';
+
 
 
 void main() async {WidgetsFlutterBinding.ensureInitialized();
 
   // Obtain a list of the available cameras on the device.
   
+  await Firebase.initializeApp();
+
+
   runApp(MyApp());}
 
 /// This is the main application widget.
@@ -81,7 +88,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.explore),
-            label: 'Medição',
+            label: 'Medição', 
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.receipt),

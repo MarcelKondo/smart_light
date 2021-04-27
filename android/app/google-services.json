@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "847119680628",
+    "firebase_url": "https://smart-light-ba2e9-default-rtdb.firebaseio.com",
+    "project_id": "smart-light-ba2e9",
+    "storage_bucket": "smart-light-ba2e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:847119680628:android:52e3ff52b98d4f01f4fd21",
+        "android_client_info": {
+          "package_name": "com.example.smart_light"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "847119680628-me5j230uamal1527lhabk02jei5vq253.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCoYiT9pmIYK82F6O7hdUoguRt2x6xN3wI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "847119680628-me5j230uamal1527lhabk02jei5vq253.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "847119680628-pnbm14fuh6apg9n6p0ggfeqsuh4usb3h.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.smartLight"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
