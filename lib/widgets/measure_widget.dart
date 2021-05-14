@@ -31,13 +31,14 @@ class HomePageState extends State<HomePage> {
     super.initState();
     final myLat = -22.987599;
     final myLong = -43.245955;
-    var subs = FirebaseDatabase.instance.reference().child('localizations').or
+    var subs = FirebaseDatabase.instance.reference().child('localizations')
       ..onChildAdded.listen((event) {
         setState(() {
           var b = event.snapshot;
           var a = b.value['data'];
-          double dist = getDistanceFromLatLonInKm(a['lat'], a['long'], myLat, myLong);
-          if(dist > max_dist){
+          double dist =
+              getDistanceFromLatLonInKm(a['lat'], a['long'], myLat, myLong);
+          if (dist > max_dist) {
             return;
           }
           var list = [
@@ -51,7 +52,7 @@ class HomePageState extends State<HomePage> {
 
           print(list);
           localizations.add(list);
-          localizations.sort((a,b)=>a[3]>b[3]?1:0);
+          localizations.sort((a, b) => a[3] > b[3] ? 1 : 0);
           loading = false;
         });
       })
@@ -61,8 +62,9 @@ class HomePageState extends State<HomePage> {
           var key = b.key;
           localizations.removeWhere((element) => element[5] == key);
           var a = b.value['data'];
-          double dist = getDistanceFromLatLonInKm(a['lat'], a['long'], myLat, myLong);
-          if(dist > max_dist){
+          double dist =
+              getDistanceFromLatLonInKm(a['lat'], a['long'], myLat, myLong);
+          if (dist > max_dist) {
             return;
           }
           var list = [
@@ -226,8 +228,8 @@ class HomePageState extends State<HomePage> {
             child: Container(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: measureContainer(
-                    endereco, distancia.toStringAsFixed(3) + ' km', 'R\$' + recompensa),
+                child: measureContainer(endereco,
+                    distancia.toStringAsFixed(3) + ' km', 'R\$' + recompensa),
               ),
             )),
       ),
@@ -387,8 +389,14 @@ class HomePageState extends State<HomePage> {
           onCameraIdle: () {
             clicked_index = '0';
           },
-          markers:
-              localizations.map((e) => createMarker(e[0], e[1], e[2])).toSet()
+          markers: {
+            ...localizations.map((e) => createMarker(e[0], e[1], e[2])).toSet(),
+            Marker(
+                markerId: MarkerId('mylocation'),
+                position: LatLng(-22.987599, -43.245955),
+                infoWindow: InfoWindow(title: 'Estrada da Gávea 379'),
+                icon: BitmapDescriptor.defaultMarker),
+          }
           // {
           //   newyork1Marker,
           //   newyork2Marker,
@@ -433,7 +441,7 @@ Set<Marker> setMarker(localizations) {
       infoWindow: InfoWindow(title: 'Estrada da Gávea 379'),
       icon: BitmapDescriptor.defaultMarker);
 
-  // res.add(mylocation);
+  res.add(mylocation);
   return res.toSet();
 }
 
@@ -529,7 +537,6 @@ double deg2rad(deg) {
   return deg * (pi / 180);
 }
 
-double calculateRecompensa(dist)
-{
-  return 0.9*dist < 10 ? 0.9*dist : 10 ;
+double calculateRecompensa(dist) {
+  return 0.9 * dist < 10 ? 0.9 * dist : 10;
 }

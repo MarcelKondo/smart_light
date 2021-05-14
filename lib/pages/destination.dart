@@ -63,7 +63,9 @@ class DestinationPageState extends State<DestinationPage> {
                 final cameras = await availableCameras();
 
   // Get a specific camera from the list of available cameras.
-                  final firstCamera = cameras.first;
+                  CameraDescription firstCamera;
+                  if(cameras.length != 0)
+                    firstCamera = cameras.first;
                   Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => TakePictureScreen(firstCamera)),
