@@ -7,7 +7,8 @@ Color lGreen = Color(0x009C92);
 class ProfileApp extends StatefulWidget {
   bool onProfile = false;
   int measures = 16;
-  //ProfileApp(this.index);
+  final Function logout;
+  ProfileApp({this.logout});
   void onProfilePage() {
     //measures += 16;
     //developer.log('on', name: 'my.app.category');
@@ -25,7 +26,17 @@ class _ProfileAppState extends State<ProfileApp> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Perfil')),
+      appBar: AppBar(title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(),
+          Text('Perfil', textAlign: TextAlign.center,),
+          IconButton(icon: Icon(Icons.logout), onPressed: (){
+            widget.logout();
+            print("Logging out...");
+          })
+        ],
+      )),
       body: ListView(
         children: <Widget>[
           Container(
@@ -44,7 +55,7 @@ class _ProfileAppState extends State<ProfileApp> {
                     children: <Widget>[
                       CircleAvatar(
                         backgroundImage: NetworkImage(
-                          "https://lh3.googleusercontent.com/V0HROXuGQsWKqNBi7sm1QREroH-sAZZrsV5BiYJ9okZTS6NeHk0-RXt2fGa5Accl-GQmDg=s85",
+                          "",
                         ),
                         radius: 50.0,
                       ),
