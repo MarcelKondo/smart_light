@@ -5,13 +5,14 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
+import '../main.dart';
+import 'send_measure.dart';
 import 'dart:developer' as developer;
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
   final CameraDescription camera;
   TakePictureScreen(this.camera);
-
 
   @override
   TakePictureScreenState createState() => TakePictureScreenState();
@@ -50,7 +51,10 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       // Wait until the controller is initialized before displaying the
       // camera preview. Use a FutureBuilder to display a loading spinner
       // until the controller has finished initializing.
-      appBar: AppBar(leading: Icon(Icons.clear),backgroundColor: Color.fromRGBO(255, 255, 255, 0),),
+      appBar: AppBar(
+        leading: Icon(Icons.clear),
+        backgroundColor: Color.fromRGBO(255, 255, 255, 0),
+      ),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
         builder: (context, snapshot) {
@@ -74,7 +78,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
           child: FittedBox(
             child: FloatingActionButton(
               //child: Icon(Icons.camera_alt),
-              
+
               backgroundColor: const Color.fromRGBO(66, 165, 245, 0.8),
               //child: Icon(Icons.lens_outlined),
               // Provide an onPressed callback.
@@ -103,8 +107,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          DisplayPictureScreen(imagePath: path),
+                      builder: (context) => SendMeasureWidget(imagePath: path),
                     ),
                   );
                 } catch (e) {
@@ -144,7 +147,10 @@ class DisplayPictureScreen extends StatelessWidget {
         label: Text('Enviar'),
         icon: Icon(Icons.send),
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => MyApp()),
+              ModalRoute.withName("/Home"));
         },
       ),
     );
