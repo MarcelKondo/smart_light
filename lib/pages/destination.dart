@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:smart_light/widgets/camera_measure.dart';
 import '../widgets/camera_measure.dart';
 import 'package:camera/camera.dart';
@@ -65,7 +63,9 @@ class DestinationPageState extends State<DestinationPage> {
                 final cameras = await availableCameras();
 
   // Get a specific camera from the list of available cameras.
-                  final firstCamera = cameras.first;
+                  CameraDescription firstCamera;
+                  if(cameras.length != 0)
+                    firstCamera = cameras.first;
                   Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => TakePictureScreen(firstCamera)),

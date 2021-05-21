@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>847119680628-pnbm14fuh6apg9n6p0ggfeqsuh4usb3h.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.847119680628-pnbm14fuh6apg9n6p0ggfeqsuh4usb3h</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBrvfjK1AGJ3HE2W39R_rlHtGIDQQoHH8k</string>
+	<key>GCM_SENDER_ID</key>
+	<string>847119680628</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.smartLight</string>
+	<key>PROJECT_ID</key>
+	<string>smart-light-ba2e9</string>
+	<key>STORAGE_BUCKET</key>
+	<string>smart-light-ba2e9.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:847119680628:ios:1c3f45c189322a34f4fd21</string>
+	<key>DATABASE_URL</key>
+	<string>https://smart-light-ba2e9-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>

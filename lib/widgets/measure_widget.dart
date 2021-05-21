@@ -1,9 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:smart_light/pages/destination.dart';
+import 'package:http/http.dart' as http;
 //import 'package:smart_light/pages/directions.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,10 +21,69 @@ class HomePage extends StatefulWidget {
 
 class HomePageState extends State<HomePage> {
   Completer<GoogleMapController> _controller = Completer();
-
+  List localizations = [];
+  final url =
+      "https://smart-light-ba2e9-default-rtdb.firebaseio.com/localizations.json";
+  bool loading = true;
+  final max_dist = 20;
   @override
   void initState() {
     super.initState();
+    final myLat = -22.987599;
+    final myLong = -43.245955;
+    var subs = FirebaseDatabase.instance.reference().child('localizations')
+      ..onChildAdded.listen((event) {
+        setState(() {
+          var b = event.snapshot;
+          var a = b.value['data'];
+          double dist =
+              getDistanceFromLatLonInKm(a['lat'], a['long'], myLat, myLong);
+          if (dist > max_dist) {
+            return;
+          }
+          var list = [
+            a['lat'],
+            a['long'],
+            a['endereco'],
+            dist,
+            calculateRecompensa(dist).toStringAsFixed(3),
+            b.key
+          ];
+
+          print(list);
+          localizations.add(list);
+          localizations.sort((a, b) => a[3] > b[3] ? 1 : 0);
+          loading = false;
+        });
+      })
+      ..onChildChanged.listen((event) {
+        setState(() {
+          var b = event.snapshot;
+          var key = b.key;
+          localizations.removeWhere((element) => element[5] == key);
+          var a = b.value['data'];
+          double dist =
+              getDistanceFromLatLonInKm(a['lat'], a['long'], myLat, myLong);
+          if (dist > max_dist) {
+            return;
+          }
+          var list = [
+            a['lat'],
+            a['long'],
+            a['endereco'],
+            dist,
+            calculateRecompensa(dist).toStringAsFixed(3),
+            b.key
+          ];
+          localizations.add(list);
+        });
+      })
+      ..onChildRemoved.listen((event) {
+        setState(() {
+          var key = event.snapshot.key;
+          localizations.removeWhere((element) => element[5] == key);
+        });
+      });
   }
 
   double zoomInc = 1.0;
@@ -28,50 +94,52 @@ class HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Medição'),
       ),
-      body: Stack(
-        children: <Widget>[
-          _buildGoogleMap(context),
-          Padding(
-            padding: EdgeInsets.only(bottom: 469.0, right: 8),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: FloatingActionButton(
-                heroTag: '1',
-                mini: true,
-                backgroundColor: Colors.red[300],
-                child: Icon(Icons.my_location),
-                onPressed: () {
-                  _gotoLocation(-22.987599, -43.245955);
-                },
-              ),
-            ),
-          ),
-          (clicked_index == 0 || clicked_index == null)
-              ? Container()
-              : Padding(
-                  padding: EdgeInsets.only(top: 50, right: 12),
+      body: loading
+          ? Center(child: CircularProgressIndicator())
+          : Stack(
+              children: <Widget>[
+                _buildGoogleMap(context),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 469.0, right: 8),
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: FloatingActionButton(
-                      heroTag: '2',
-                      backgroundColor: Colors.amber,
-                      child: Icon(
-                        Icons.navigation,
-                        color: Colors.black,
-                      ),
+                      heroTag: '1',
+                      mini: true,
+                      backgroundColor: Colors.red[300],
+                      child: Icon(Icons.my_location),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DestinationPage()),
-                        );
+                        _gotoLocation(-22.987599, -43.245955);
                       },
                     ),
                   ),
                 ),
-          _buildContainer(),
-        ],
-      ),
+                (clicked_index == '0' || clicked_index == null)
+                    ? Container()
+                    : Padding(
+                        padding: EdgeInsets.only(top: 50, right: 12),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: FloatingActionButton(
+                            heroTag: '2',
+                            backgroundColor: Colors.amber,
+                            child: Icon(
+                              Icons.navigation,
+                              color: Colors.black,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => DestinationPage()),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                _buildContainer(localizations),
+              ],
+            ),
     );
   }
 
@@ -111,8 +179,8 @@ class HomePageState extends State<HomePage> {
         CameraPosition(target: LatLng(-22.9890, -43.2471), zoom: zoomVal)));
   }
 
-  int clicked_index;
-  Widget _buildContainer() {
+  String clicked_index;
+  Widget _buildContainer(List localizations) {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
@@ -120,45 +188,30 @@ class HomePageState extends State<HomePage> {
         height: 195.0,
         child: ListView(
           scrollDirection: Axis.vertical,
-          children: <Widget>[
-            SizedBox(width: 4.0),
-            Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: _boxes(
-                  -22.988804, -43.247650, 'R. Nova, 104', '0,5', '5,60', 1),
-            ),
-            SizedBox(width: 4.0),
-            Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: _boxes(-22.987515, -43.246309, "Estrada da Gávea, 390",
-                  '0,7', '4,60', 2),
-            ),
-            SizedBox(width: 4.0),
-            Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: _boxes(-22.988294, -43.24796, "R. M. das Dores de Melo",
-                  '1,3', '3,50', 3),
-            ),
-            SizedBox(width: 4.0),
-            Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: _boxes(-22.987915, -43.247435, "Estrada da Gávea 407",
-                  '1,7', '5,80', 4),
-            ),
-            SizedBox(width: 4.0),
-            Padding(
-              padding: const EdgeInsets.all(3.0),
-              child: _boxes(
-                  -22.987658, -43.248143, "R. Dionéia", '2,6', '3,40', 5),
-            ),
-          ],
+          children: localizations
+              .map((e) => _boxesOption(e[0], e[1], e[2], e[3], e[4], e[5]))
+              .toList(),
         ),
       ),
     );
   }
 
-  Widget _boxes(double lat, double long, String endereco, String distancia,
-      String recompensa, int index) {
+  Widget _boxesOption(double lat, double long, String endereco,
+      double distancia, String recompensa, String index) {
+    return Container(
+        child: Column(
+      children: [
+        SizedBox(width: 4.0),
+        Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: _boxes(lat, long, endereco, distancia, recompensa, index),
+        ),
+      ],
+    ));
+  }
+
+  Widget _boxes(double lat, double long, String endereco, double distancia,
+      String recompensa, String index) {
     return GestureDetector(
       onTap: () {
         _gotoLocation(lat, long);
@@ -175,8 +228,8 @@ class HomePageState extends State<HomePage> {
             child: Container(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: measureContainer(
-                    endereco, distancia + ' km', 'R\$' + recompensa),
+                child: measureContainer(endereco,
+                    distancia.toStringAsFixed(3) + ' km', 'R\$' + recompensa),
               ),
             )),
       ),
@@ -322,30 +375,38 @@ class HomePageState extends State<HomePage> {
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition:
-            CameraPosition(target: LatLng(-22.9890, -43.2471), zoom: 14),
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-        onCameraMoveStarted: () {
-          setState(() {
-            clicked_index = clicked_index;
-          });
-        },
-        onCameraIdle: () {
-          clicked_index = 0;
-        },
-        markers: {
-          newyork1Marker,
-          newyork2Marker,
-          newyork3Marker,
-          gramercyMarker,
-          bernardinMarker,
-          blueMarker,
-          myLocation
-        },
-      ),
+          mapType: MapType.normal,
+          initialCameraPosition:
+              CameraPosition(target: LatLng(-22.9890, -43.2471), zoom: 14),
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+          onCameraMoveStarted: () {
+            setState(() {
+              clicked_index = clicked_index;
+            });
+          },
+          onCameraIdle: () {
+            clicked_index = '0';
+          },
+          markers: {
+            ...localizations.map((e) => createMarker(e[0], e[1], e[2])).toSet(),
+            Marker(
+                markerId: MarkerId('mylocation'),
+                position: LatLng(-22.987599, -43.245955),
+                infoWindow: InfoWindow(title: 'Estrada da Gávea 379'),
+                icon: BitmapDescriptor.defaultMarker),
+          }
+          // {
+          //   newyork1Marker,
+          //   newyork2Marker,
+          //   newyork3Marker,
+          //   gramercyMarker,
+          //   bernardinMarker,
+          //   blueMarker,
+          //   myLocation
+          // },
+          ),
     );
   }
 
@@ -360,61 +421,122 @@ class HomePageState extends State<HomePage> {
   }
 }
 
-Marker gramercyMarker = Marker(
-  markerId: MarkerId('gramercy'),
-  position: LatLng(-22.988804, -43.247650),
-  infoWindow: InfoWindow(title: 'R. Nova, 104'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
+Marker createMarker(double lat, double long, String title) {
+  return Marker(
+    markerId: MarkerId(title),
+    position: LatLng(lat, long),
+    infoWindow: InfoWindow(title: title),
+    icon: BitmapDescriptor.defaultMarkerWithHue(
+      BitmapDescriptor.hueViolet,
+    ),
+  );
+}
 
-Marker bernardinMarker = Marker(
-  markerId: MarkerId('bernardin'),
-  position: LatLng(-22.987515, -43.246309),
-  infoWindow: InfoWindow(title: 'Estrada da Gávea, 390'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
-Marker blueMarker = Marker(
-  markerId: MarkerId('bluehill'),
-  position: LatLng(-22.986493, -43.249581),
-  infoWindow: InfoWindow(title: 'R. Portão Vermelho'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
+Set<Marker> setMarker(localizations) {
+  Set<Marker> res =
+      localizations.map((e) => createMarker(e[0], e[1], e[2])).toSet();
+  Marker mylocation = Marker(
+      markerId: MarkerId('mylocation'),
+      position: LatLng(-22.987599, -43.245955),
+      infoWindow: InfoWindow(title: 'Estrada da Gávea 379'),
+      icon: BitmapDescriptor.defaultMarker);
 
-//New York Marker
+  res.add(mylocation);
+  return res.toSet();
+}
 
-Marker newyork1Marker = Marker(
-  markerId: MarkerId('newyork1'),
-  position: LatLng(-22.988294, -43.247967),
-  infoWindow: InfoWindow(title: 'R. Maria das Dores de Melo 50'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
-Marker newyork2Marker = Marker(
-  markerId: MarkerId('newyork2'),
-  position: LatLng(-22.987915, -43.247435),
-  infoWindow: InfoWindow(title: 'Estrada da Gávea 407'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
-Marker newyork3Marker = Marker(
-  markerId: MarkerId('newyork3'),
-  position: LatLng(-22.987658, -43.248143),
-  infoWindow: InfoWindow(title: 'R. Dionéia 77'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
+// Marker gramercyMarker = Marker(
+//   markerId: MarkerId('gramercy'),
+//   position: LatLng(-22.988804, -43.247650),
+//   infoWindow: InfoWindow(title: 'R. Nova, 104'),
+//   icon: BitmapDescriptor.defaultMarkerWithHue(
+//     BitmapDescriptor.hueViolet,
+//   ),
+// );
 
-Marker myLocation = Marker(
-    markerId: MarkerId('mylocation'),
-    position: LatLng(-22.987599, -43.245955),
-    infoWindow: InfoWindow(title: 'Estrada da Gávea 379'),
-    icon: BitmapDescriptor.defaultMarker);
+// Marker bernardinMarker = Marker(
+//   markerId: MarkerId('bernardin'),
+//   position: LatLng(-22.987515, -43.246309),
+//   infoWindow: InfoWindow(title: 'Estrada da Gávea, 390'),
+//   icon: BitmapDescriptor.defaultMarkerWithHue(
+//     BitmapDescriptor.hueViolet,
+//   ),
+// );
+// Marker blueMarker = Marker(
+//   markerId: MarkerId('bluehill'),
+//   position: LatLng(-22.986493, -43.249581),
+//   infoWindow: InfoWindow(title: 'R. Portão Vermelho'),
+//   icon: BitmapDescriptor.defaultMarkerWithHue(
+//     BitmapDescriptor.hueViolet,
+//   ),
+// );
+
+// //New York Marker
+
+// Marker newyork1Marker = Marker(
+//   markerId: MarkerId('newyork1'),
+//   position: LatLng(-22.988294, -43.247967),
+//   infoWindow: InfoWindow(title: 'R. Maria das Dores de Melo 50'),
+//   icon: BitmapDescriptor.defaultMarkerWithHue(
+//     BitmapDescriptor.hueViolet,
+//   ),
+// );
+// Marker newyork2Marker = Marker(
+//   markerId: MarkerId('newyork2'),
+//   position: LatLng(-22.987915, -43.247435),
+//   infoWindow: InfoWindow(title: 'Estrada da Gávea 407'),
+//   icon: BitmapDescriptor.defaultMarkerWithHue(
+//     BitmapDescriptor.hueViolet,
+//   ),
+// );
+// Marker newyork3Marker = Marker(
+//   markerId: MarkerId('newyork3'),
+//   position: LatLng(-22.987658, -43.248143),
+//   infoWindow: InfoWindow(title: 'R. Dionéia 77'),
+//   icon: BitmapDescriptor.defaultMarkerWithHue(
+//     BitmapDescriptor.hueViolet,
+//   ),
+// );
+
+// Marker myLocation = Marker(
+//     markerId: MarkerId('mylocation'),
+//     position: LatLng(-22.987599, -43.245955),
+//     infoWindow: InfoWindow(title: 'Estrada da Gávea 379'),
+//     icon: BitmapDescriptor.defaultMarker);
+
+Future<List> fetchLocations(url, HomePageState a) {
+  return http.get(url).then((value) {
+    Map a = json.decode(value.body);
+    int i = 0;
+    return a.keys.toList().map((e) {
+      i++;
+      return [
+        a[e]['data']['lat'],
+        a[e]['data']['long'],
+        a[e]['data']['endereco'],
+        a[e]['data']['distancia'],
+        a[e]['data']['Recompensa'],
+        e
+      ];
+    }).toList();
+  });
+}
+
+double getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2 - lat1); // deg2rad below
+  var dLon = deg2rad(lon2 - lon1);
+  var a = sin(dLat / 2) * sin(dLat / 2) +
+      cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * sin(dLon / 2) * sin(dLon / 2);
+  var c = 2 * atan2(sqrt(a), sqrt(1 - a));
+  var d = R * c; // Distance in km
+  return d;
+}
+
+double deg2rad(deg) {
+  return deg * (pi / 180);
+}
+
+double calculateRecompensa(dist) {
+  return 0.9 * dist < 10 ? 0.9 * dist : 10;
+}

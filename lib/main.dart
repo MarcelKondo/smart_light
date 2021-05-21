@@ -1,5 +1,8 @@
 //import 'dart:html';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+
 /// Flutter code sample for BottomNavigationBar
 
 // This example shows a [BottomNavigationBar] as it is used within a [Scaffold]
@@ -12,16 +15,24 @@
 // bar items. The first one is selected.](https://flutter.github.io/assets-for-api-docs/assets/material/bottom_navigation_bar.png)
 
 import 'package:flutter/material.dart';
+import 'package:smart_light/pages/welcomePage.dart';
 import 'package:smart_light/widgets/problem.dart';
 import 'package:smart_light/widgets/profile.dart';
 import './widgets/measure_widget.dart';
 import './widgets/profile.dart';
 import './widgets/entrega.dart';
+import 'package:camera/camera.dart';
+import 'dart:async';
+import 'package:firebase_database/firebase_database.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Obtain a list of the available cameras on the device.
+
+
+  await Firebase.initializeApp();
 
   runApp(MyApp());
 }
@@ -49,9 +60,11 @@ class MyStatefulWidget extends StatefulWidget {
 /// This is the private State class that goes with MyStatefulWidget.
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   int _selectedIndex = 0;
+  bool isLogged = false;
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   static List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     Entrega(),
@@ -59,46 +72,66 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     ProfileApp(),
   ];
 
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  void login() {
+    setState(() {
+      isLogged = true;
+    });
+  }
+  void logout() {
+    setState(() {
+      isLogged = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      /*appBar: AppBar(
+    List<Widget> _widgetOptions = <Widget>[
+    HomePage(),
+    Entrega(),
+    ProblemWidget(),
+    ProfileApp(logout: logout,),
+  ];
+    return !isLogged
+        ? WelcomePage(login: login,title:"Smart Light",)
+        : Scaffold(
+            /*appBar: AppBar(
         title: const Text('Smart Light'),
       ),*/
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'Medição',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.receipt),
-            label: 'Entrega',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.warning_rounded),
-            label: 'Problema',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Perfil',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        unselectedItemColor: Colors.black,
-        unselectedLabelStyle: TextStyle(color: Colors.black),
-        onTap: _onItemTapped,
-      ),
-    );
+            body: Center(
+              child: _widgetOptions.elementAt(_selectedIndex),
+            ),
+            bottomNavigationBar: BottomNavigationBar(
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.explore),
+                  label: 'Medição',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.receipt),
+                  label: 'Entrega',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.warning_rounded),
+                  label: 'Problema',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.person),
+                  label: 'Perfil',
+                ),
+              ],
+              currentIndex: _selectedIndex,
+              selectedItemColor: Colors.amber[800],
+              unselectedItemColor: Colors.black,
+              unselectedLabelStyle: TextStyle(color: Colors.black),
+              onTap: _onItemTapped,
+            ),
+          );
   }
 }
