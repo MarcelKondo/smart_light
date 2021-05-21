@@ -1,17 +1,7 @@
 import 'package:flutter/material.dart';
 
-// class ProblemWidget extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text('Reportar um problema'),),
-//     );
-//   }
-// }
-
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import '../main.dart';
 
 class SendMeasureWidget extends StatelessWidget {
@@ -53,40 +43,51 @@ class SendMeasureWidget extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /*Text('Descrição do problema',
-                          style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: MediaQuery.of(context).size.width *
-                                  0.05264214),
-                          textScaleFactor: 1.0,
-                          overflow: TextOverflow.ellipsis),*/
-                    TextField(
-                      maxLength: 5,
-                      style: TextStyle(height: 1.0),
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: "Valor medido",
-                        suffix: Text("kWh"),
+              padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+              child:
+                  Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                Row(children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 10),
+                    child: SizedBox(
+                      width: 150,
+                      child: TextField(
+                        maxLength: 5,
+                        style: TextStyle(),
+                        textAlign: TextAlign.end,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: "Valor medido",
+                          suffix: Text("kWh"),
+                        ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20),
-                      child: FloatingActionButton.extended(
-                          onPressed: () {
-                            Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MyApp()),
-                                ModalRoute.withName("/Home"));
-                          },
-                          icon: Icon(Icons.send),
-                          label: Text('Enviar')),
-                    )
-                  ]),
+                  ),
+                  Flexible(
+                    child: TextField(
+                      maxLength: 8,
+                      style: TextStyle(),
+                      textAlign: TextAlign.end,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "Identificador",
+                      ),
+                    ),
+                  ),
+                ]),
+                Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: FloatingActionButton.extended(
+                      onPressed: () {
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(builder: (context) => MyApp()),
+                            ModalRoute.withName("/Home"));
+                      },
+                      icon: Icon(Icons.send),
+                      label: Text('Enviar')),
+                )
+              ]),
             )
           ],
         )

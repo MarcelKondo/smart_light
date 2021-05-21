@@ -17,15 +17,14 @@ import 'package:smart_light/widgets/profile.dart';
 import './widgets/measure_widget.dart';
 import './widgets/profile.dart';
 import './widgets/entrega.dart';
-import 'package:camera/camera.dart';
-import 'dart:async';
 
-
-void main() async {WidgetsFlutterBinding.ensureInitialized();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
   // Obtain a list of the available cameras on the device.
-  
-  runApp(MyApp());}
+
+  runApp(MyApp());
+}
 
 /// This is the main application widget.
 class MyApp extends StatelessWidget {
@@ -43,8 +42,6 @@ class MyApp extends StatelessWidget {
 
 /// This is the stateful widget that the main application instantiates.
 class MyStatefulWidget extends StatefulWidget {
-  
-
   @override
   _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
@@ -55,7 +52,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static  List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
     HomePage(),
     Entrega(),
     ProblemWidget(),

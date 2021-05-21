@@ -7,7 +7,6 @@ import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
 import '../main.dart';
 import 'send_measure.dart';
-import 'dart:developer' as developer;
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
@@ -53,7 +52,6 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       // until the controller has finished initializing.
       appBar: AppBar(
         leading: Icon(Icons.clear),
-        backgroundColor: Color.fromRGBO(255, 255, 255, 0),
       ),
       body: FutureBuilder<void>(
         future: _initializeControllerFuture,
