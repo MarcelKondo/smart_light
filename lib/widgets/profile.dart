@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import 'dart:developer' as developer;
+import 'package:smart_light/widgets/profile_bill.dart';
 
 Color lGreen = Color(0x009C92);
 
 class ProfileApp extends StatefulWidget {
   bool onProfile = false;
   int measures = 16;
+  
   //ProfileApp(this.index);
   void onProfilePage() {
     //measures += 16;
@@ -22,140 +24,175 @@ class ProfileApp extends StatefulWidget {
 }
 
 class _ProfileAppState extends State<ProfileApp> {
+  final dados =  const [
+    {
+      'mes': 'JAN/2013',
+      'vencimento': '04/02/2013',
+      'consumo': '155',
+      'dias': '29',
+      'total': '68,82',
+      'color': Colors.red
+    },
+    {
+      'mes': 'DEZ/2012',
+      'vencimento': '03/01/2013',
+      'consumo': '183',
+      'dias': '30',
+      'total': '98,78',
+      'color': Colors.green
+    },
+    {
+      'mes': 'NOV/2012',
+      'vencimento': '05/12/2012',
+      'consumo': '190',
+      'dias': '33',
+      'total': '102,99',
+      'color': Colors.green
+    },
+    {
+      'mes': 'OUT/2012',
+      'vencimento': '07/11/2012',
+      'consumo': '160',
+      'dias': '29',
+      'total': '70,20',
+      'color': Colors.green
+    },
+  ];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Perfil')),
-      body: ListView(
-        children: <Widget>[
-          Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.blueAccent, lGreen])),
-              child: Container(
-                width: double.infinity,
-                height: 350.0,
-                child: Center(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          "https://lh3.googleusercontent.com/V0HROXuGQsWKqNBi7sm1QREroH-sAZZrsV5BiYJ9okZTS6NeHk0-RXt2fGa5Accl-GQmDg=s85",
-                        ),
-                        radius: 50.0,
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        "Renato Freire",
-                        style: TextStyle(
-                          fontSize: 22.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Card(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 20.0, vertical: 5.0),
-                        clipBehavior: Clip.antiAlias,
-                        color: Colors.white,
-                        elevation: 5.0,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0, vertical: 22.0),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      "Medidas Realizadas",
-                                      style: TextStyle(
-                                        color: Colors.blueAccent,
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Text(
-                                      "16",
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.blueAccent,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      "Faturas Entregues",
-                                      style: TextStyle(
-                                        color: Colors.blueAccent,
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Text(
-                                      "15",
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.blueAccent,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  children: <Widget>[
-                                    Text(
-                                      "Crédito",
-                                      style: TextStyle(
-                                        color: Colors.green,
-                                        fontSize: 22.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Text(
-                                      "R\$ 82",
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        color: Colors.green,
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
+
+        return Scaffold(
+          appBar: AppBar(title: Text('Perfil')),
+          body: ListView(
+            children: <Widget>[
+              Container(
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [Colors.blueAccent, lGreen])),
+                  child: Container(
+                    width: double.infinity,
+                    height: 350.0,
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          CircleAvatar(
+                            backgroundImage: NetworkImage(
+                              "http://t3.gstatic.com/licensed-image?q=tbn:ANd9GcTzfLD_DaT5Zuf3l0HWgdxWOg7iWFK0tkHVgoGdjCYnOaPKC6p6SDgQSboxu10M",
+                            ),
+                            radius: 50.0,
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              )),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            "Renato Freire",
+                            style: TextStyle(
+                              fontSize: 22.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Card(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 20.0, vertical: 5.0),
+                            clipBehavior: Clip.antiAlias,
+                            color: Colors.white,
+                            elevation: 5.0,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8.0, vertical: 22.0),
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          "Medidas Realizadas",
+                                          style: TextStyle(
+                                            color: Colors.blueAccent,
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Text(
+                                          "16",
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            color: Colors.blueAccent,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          "Faturas Entregues",
+                                          style: TextStyle(
+                                            color: Colors.blueAccent,
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        Text(
+                                          "15",
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            color: Colors.blueAccent,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      children: <Widget>[
+                                        Text(
+                                          "Crédito",
+                                          style: TextStyle(
+                                            color: Colors.green,
+                                            fontSize: 22.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          "R\$ 82",
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            color: Colors.green,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  )),
+          ...dados
+                  .map((result) => ProfileBill(result['mes'],result['vencimento'], result['consumo'], result['dias'], result['total'], result['color']))
+                  .toList(),
           Column(
-            children: [
+            children: [            
               FlatButton(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
