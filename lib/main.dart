@@ -25,12 +25,10 @@ import 'package:camera/camera.dart';
 import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Obtain a list of the available cameras on the device.
-
 
   await Firebase.initializeApp();
 
@@ -65,14 +63,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  static List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    Entrega(),
-    ProblemWidget(),
-    ProfileApp(),
-  ];
-
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -84,6 +74,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       isLogged = true;
     });
   }
+
   void logout() {
     setState(() {
       isLogged = false;
@@ -93,13 +84,18 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   Widget build(BuildContext context) {
     List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    Entrega(),
-    ProblemWidget(),
-    ProfileApp(logout: logout,),
-  ];
+      HomePage(login),
+      Entrega(),
+      ProblemWidget(),
+      ProfileApp(
+        logout: logout,
+      ),
+    ];
     return !isLogged
-        ? WelcomePage(login: login,title:"Smart Light",)
+        ? WelcomePage(
+            login: login,
+            title: "Smart Light",
+          )
         : Scaffold(
             /*appBar: AppBar(
         title: const Text('Smart Light'),

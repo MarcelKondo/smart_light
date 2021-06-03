@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart';
@@ -11,7 +12,10 @@ import 'send_measure.dart';
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
   final CameraDescription camera;
-  TakePictureScreen(this.camera);
+
+  final Function login;
+  final String index;
+  TakePictureScreen(this.camera, this.login, {this.index});
 
   @override
   TakePictureScreenState createState() => TakePictureScreenState();
@@ -105,7 +109,11 @@ class TakePictureScreenState extends State<TakePictureScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SendMeasureWidget(imagePath: path),
+                      builder: (context) => SendMeasureWidget(
+                        imagePath: path,
+                        login: widget.login,
+                        index: widget.index,
+                      ),
                     ),
                   );
                 } catch (e) {

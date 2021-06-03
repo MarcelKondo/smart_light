@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:io';
@@ -6,8 +7,10 @@ import '../main.dart';
 
 class SendMeasureWidget extends StatelessWidget {
   final String imagePath;
-
-  const SendMeasureWidget({Key key, this.imagePath}) : super(key: key);
+  final Function login;
+  final String index;
+  const SendMeasureWidget({Key key, this.imagePath, this.login, this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +82,14 @@ class SendMeasureWidget extends StatelessWidget {
                   padding: EdgeInsets.only(top: 20),
                   child: FloatingActionButton.extended(
                       onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => MyApp()),
-                            ModalRoute.withName("/Home"));
+                        login();
+                        print("O index é : " + index);
+                        FirebaseDatabase.instance
+                            .reference()
+                            .child('localizations')
+                            .child(index)
+                            .remove();
+                        Navigator.popUntil(context, ModalRoute.withName("/"));
                       },
                       icon: Icon(Icons.send),
                       label: Text('Enviar')),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:smart_light/widgets/camera_measure.dart';
@@ -7,7 +8,10 @@ import 'package:camera/camera.dart';
 //import 'package:smart_light/pages/directions.dart';
 
 class DestinationPage extends StatefulWidget {
-    
+  Function login;
+  String index;
+  DestinationPage({this.login, this.index});
+
   @override
   DestinationPageState createState() => DestinationPageState();
 }
@@ -18,27 +22,25 @@ class DestinationPageState extends State<DestinationPage> {
   @override
   void initState() {
     List<LatLng> latlng = List();
-                        LatLng _new = LatLng(-22.987599, -43.245955);
-                        LatLng _news = LatLng(-22.988294, -43.247967);
+    LatLng _new = LatLng(-22.987599, -43.245955);
+    LatLng _news = LatLng(-22.988294, -43.247967);
 
-                        latlng.add(_new);
-                        latlng.add(_news);
+    latlng.add(_new);
+    latlng.add(_news);
 
-                        _polyline.add(Polyline(
-                          polylineId: PolylineId('1'),
-                          visible: true,
-                          //latlng is List<LatLng>
-                          points: latlng,
-                          color: Colors.blue,
-                        ));
+    _polyline.add(Polyline(
+      polylineId: PolylineId('1'),
+      visible: true,
+      //latlng is List<LatLng>
+      points: latlng,
+      color: Colors.blue,
+    ));
+
     super.initState();
   }
-  
 
   double zoomInc = 1.0;
   double zoomVal = 14.0;
-
- 
 
   @override
   Widget build(BuildContext context) {
@@ -59,17 +61,18 @@ class DestinationPageState extends State<DestinationPage> {
                 label: Text('Medir'),
                 icon: Icon(Icons.explore),
                 onPressed: () async {
+                  final cameras = await availableCameras();
 
-                final cameras = await availableCameras();
-
-  // Get a specific camera from the list of available cameras.
+                  // Get a specific camera from the list of available cameras.
                   CameraDescription firstCamera;
-                  if(cameras.length != 0)
-                    firstCamera = cameras.first;
+                  if (cameras.length != 0) firstCamera = cameras.first;
                   Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => TakePictureScreen(firstCamera)),
-  );
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => TakePictureScreen(
+                            firstCamera, widget.login,
+                            index: widget.index)),
+                  );
                 },
               ),
             ),
@@ -85,13 +88,11 @@ class DestinationPageState extends State<DestinationPage> {
     return Align(
       alignment: Alignment.bottomLeft,
       child: Container(
-        margin: EdgeInsets.only(bottom: 5.0),
-        height: 195.0,
-        child: Container()
-      ),
+          margin: EdgeInsets.only(bottom: 5.0),
+          height: 195.0,
+          child: Container()),
     );
   }
-
 
 //add your lat and lng where you wants to draw polyline
 
@@ -109,12 +110,8 @@ class DestinationPageState extends State<DestinationPage> {
             CameraPosition(target: LatLng(-22.9890, -43.2471), zoom: 17),
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
-           
         },
-        markers: {
-          myLocation, 
-          newyork1Marker
-        },
+        markers: {myLocation, newyork1Marker},
       ),
     );
   }

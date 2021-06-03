@@ -14,7 +14,9 @@ import 'package:http/http.dart' as http;
 //import 'package:smart_light/pages/directions.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage();
+  Function login;
+
+  HomePage(this.login);
   @override
   HomePageState createState() => HomePageState();
 }
@@ -131,7 +133,10 @@ class HomePageState extends State<HomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => DestinationPage()),
+                                    builder: (context) => DestinationPage(
+                                          login: widget.login,
+                                          index: clicked_index,
+                                        )),
                               );
                             },
                           ),
@@ -387,7 +392,7 @@ class HomePageState extends State<HomePage> {
             });
           },
           onCameraIdle: () {
-            clicked_index = '0';
+            clicked_index = clicked_index;
           },
           markers: {
             ...localizations.map((e) => createMarker(e[0], e[1], e[2])).toSet(),
