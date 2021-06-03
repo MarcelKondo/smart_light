@@ -50,7 +50,7 @@ class _WelcomePageState extends State<WelcomePage> {
     return InkWell(
       onTap: () {
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => SignUpPage()));
+            context, MaterialPageRoute(builder: (context) => SignUpPage(login: widget.login,)));
       },
       child: Container(
         width: MediaQuery.of(context).size.width,

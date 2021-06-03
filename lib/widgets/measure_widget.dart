@@ -445,64 +445,64 @@ Set<Marker> setMarker(localizations) {
   return res.toSet();
 }
 
-// Marker gramercyMarker = Marker(
-//   markerId: MarkerId('gramercy'),
-//   position: LatLng(-22.988804, -43.247650),
-//   infoWindow: InfoWindow(title: 'R. Nova, 104'),
-//   icon: BitmapDescriptor.defaultMarkerWithHue(
-//     BitmapDescriptor.hueViolet,
-//   ),
-// );
+Marker gramercyMarker = Marker(
+  markerId: MarkerId('gramercy'),
+  position: LatLng(-22.988804, -43.247650),
+  infoWindow: InfoWindow(title: 'R. Nova, 104'),
+  icon: BitmapDescriptor.defaultMarkerWithHue(
+    BitmapDescriptor.hueViolet,
+  ),
+);
 
-// Marker bernardinMarker = Marker(
-//   markerId: MarkerId('bernardin'),
-//   position: LatLng(-22.987515, -43.246309),
-//   infoWindow: InfoWindow(title: 'Estrada da Gávea, 390'),
-//   icon: BitmapDescriptor.defaultMarkerWithHue(
-//     BitmapDescriptor.hueViolet,
-//   ),
-// );
-// Marker blueMarker = Marker(
-//   markerId: MarkerId('bluehill'),
-//   position: LatLng(-22.986493, -43.249581),
-//   infoWindow: InfoWindow(title: 'R. Portão Vermelho'),
-//   icon: BitmapDescriptor.defaultMarkerWithHue(
-//     BitmapDescriptor.hueViolet,
-//   ),
-// );
+Marker bernardinMarker = Marker(
+  markerId: MarkerId('bernardin'),
+  position: LatLng(-22.987515, -43.246309),
+  infoWindow: InfoWindow(title: 'Estrada da Gávea, 390'),
+  icon: BitmapDescriptor.defaultMarkerWithHue(
+    BitmapDescriptor.hueViolet,
+  ),
+);
+Marker blueMarker = Marker(
+  markerId: MarkerId('bluehill'),
+  position: LatLng(-22.986493, -43.249581),
+  infoWindow: InfoWindow(title: 'R. Portão Vermelho'),
+  icon: BitmapDescriptor.defaultMarkerWithHue(
+    BitmapDescriptor.hueViolet,
+  ),
+);
 
-// //New York Marker
+//New York Marker
 
-// Marker newyork1Marker = Marker(
-//   markerId: MarkerId('newyork1'),
-//   position: LatLng(-22.988294, -43.247967),
-//   infoWindow: InfoWindow(title: 'R. Maria das Dores de Melo 50'),
-//   icon: BitmapDescriptor.defaultMarkerWithHue(
-//     BitmapDescriptor.hueViolet,
-//   ),
-// );
-// Marker newyork2Marker = Marker(
-//   markerId: MarkerId('newyork2'),
-//   position: LatLng(-22.987915, -43.247435),
-//   infoWindow: InfoWindow(title: 'Estrada da Gávea 407'),
-//   icon: BitmapDescriptor.defaultMarkerWithHue(
-//     BitmapDescriptor.hueViolet,
-//   ),
-// );
-// Marker newyork3Marker = Marker(
-//   markerId: MarkerId('newyork3'),
-//   position: LatLng(-22.987658, -43.248143),
-//   infoWindow: InfoWindow(title: 'R. Dionéia 77'),
-//   icon: BitmapDescriptor.defaultMarkerWithHue(
-//     BitmapDescriptor.hueViolet,
-//   ),
-// );
+Marker newyork1Marker = Marker(
+  markerId: MarkerId('newyork1'),
+  position: LatLng(-22.988294, -43.247967),
+  infoWindow: InfoWindow(title: 'R. Maria das Dores de Melo 50'),
+  icon: BitmapDescriptor.defaultMarkerWithHue(
+    BitmapDescriptor.hueViolet,
+  ),
+);
+Marker newyork2Marker = Marker(
+  markerId: MarkerId('newyork2'),
+  position: LatLng(-22.987915, -43.247435),
+  infoWindow: InfoWindow(title: 'Estrada da Gávea 407'),
+  icon: BitmapDescriptor.defaultMarkerWithHue(
+    BitmapDescriptor.hueViolet,
+  ),
+);
+Marker newyork3Marker = Marker(
+  markerId: MarkerId('newyork3'),
+  position: LatLng(-22.987658, -43.248143),
+  infoWindow: InfoWindow(title: 'R. Dionéia 77'),
+  icon: BitmapDescriptor.defaultMarkerWithHue(
+    BitmapDescriptor.hueViolet,
+  ),
+);
 
-// Marker myLocation = Marker(
-//     markerId: MarkerId('mylocation'),
-//     position: LatLng(-22.987599, -43.245955),
-//     infoWindow: InfoWindow(title: 'Estrada da Gávea 379'),
-//     icon: BitmapDescriptor.defaultMarker);
+Marker myLocation = Marker(
+    markerId: MarkerId('mylocation'),
+    position: LatLng(-22.987599, -43.245955),
+    infoWindow: InfoWindow(title: 'Estrada da Gávea 379'),
+    icon: BitmapDescriptor.defaultMarker);
 
 Future<List> fetchLocations(url, HomePageState a) {
   return http.get(url).then((value) {
